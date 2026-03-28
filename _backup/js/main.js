@@ -391,43 +391,84 @@ function initChatbot() {
   });
 }
 
+// ── Language detection ────────────────────────────────────────
+function detectLang(text) {
+  // Arabic Unicode block
+  if (/[\u0600-\u06FF]/.test(text)) return 'ar';
+  // French markers
+  const frWords = ['bonjour', 'merci', 'oui', 'non', 'comment', 'combien', 'prix',
+    'garantie', 'service', 'démarrer', 'publicité', 'résultat', 'je', 'vous',
+    'nous', 'est', 'pour', 'avec', 'sur', 'une', 'des', 'pas', 'qui', 'que'];
+  const lower = text.toLowerCase();
+  if (frWords.some(w => lower.includes(w))) return 'fr';
+  return 'en';
+}
+
 function getChatbotReply(message) {
+  const lang = detectLang(message);
   const msg = message.toLowerCase();
-  const has = (...terms) => terms.some((term) => msg.includes(term));
+  const has = (...terms) => terms.some((t) => msg.includes(t));
 
-  if (has('price', 'pricing', 'cost', 'budget', 'fee')) {
+  // ── Arabic replies ────────────────────────────────────────────
+  if (lang === 'ar') {
+    if (has('سعر', 'تكلفة', 'ثمن', 'ميزانية', 'كم', 'تمن', 'تكلف'))
+      return 'معظم العملاء يبدؤون بـ 800$ شهرياً للإعلانات المدفوعة و600$ للـ SEO. نحدد الخطة في 24 ساعة.';
+    if (has('ضمان', 'استرداد', 'مخاطرة', 'ضمانة'))
+      return 'نضع مؤشر أداء KPI قبل البدء. إذا لم نحققه في 90 يوماً، سنعيد لك المبلغ كاملاً.';
+    if (has('بداية', 'وقت', 'متى', 'سرعة', 'يبدا', 'نبدا'))
+      return 'نبدأ العمل خلال 7 أيام عمل. الحملات تنطلق في الأسبوع الثاني مع تقارير أسبوعية.';
+    if (has('نتيجة', 'نتائج', 'إثبات', 'حالة', 'عمل', 'رواس'))
+      return 'من أبرز نتائجنا: 3× ROAS في 60 يوماً والوصول للصفحة الأولى في Google خلال 6 أشهر.';
+    if (has('seo', 'محركات', 'بحث', 'جوجل', 'مقالات', 'روابط'))
+      return 'الـ SEO: فحص تقني، خريطة كلمات، 4 مقالات شهرياً، وروابط خلفية — ابتداءً من 600$/شهر.';
+    if (has('إعلان', 'إعلانات', 'ميتا', 'تيك توك', 'مدفوع', 'تيكتوك'))
+      return 'الإعلانات المدفوعة: Meta، Google، TikTok مع اختبار A/B أسبوعي — من 800$/شهر.';
+    if (has('أتمتة', 'crm', 'هبسبوت', 'تقنية', 'أوتوماتيك', 'زابير'))
+      return 'الأتمتة: إعداد HubSpot أو Pipedrive، تسلسلات البريد الإلكتروني، وZapier — من 500$/شهر.';
+    if (has('تواصل', 'تدقيق', 'اجتماع', 'اتصال', 'حجز', 'بريد'))
+      return 'احجز تدقيقاً مجانياً مدته 45 دقيقة عبر نموذج التواصل أو راسلنا على hello@noortomark.com.';
+    return 'أخبرني بهدفك (عملاء محتملون، إيرادات، ROAS) وميزانيتك الشهرية — سأرشدك للخدمة المناسبة.';
+  }
+
+  // ── French replies ────────────────────────────────────────────
+  if (lang === 'fr') {
+    if (has('prix', 'tarif', 'coût', 'budget', 'combien'))
+      return 'La plupart de nos clients commencent à 800$/mois pour la publicité payante et 600$/mois pour le SEO. Nous définissons un plan en 24h.';
+    if (has('garantie', 'remboursement', 'risque'))
+      return 'Nous fixons un KPI avant le démarrage. Si nous ne l\'atteignons pas en 90 jours, remboursement intégral.';
+    if (has('démarrer', 'délai', 'vite', 'début', 'quand', 'comment'))
+      return 'Démarrage en 7 jours ouvrables. Campagnes en ligne dès la semaine 2, avec rapports hebdomadaires.';
+    if (has('résultat', 'preuve', 'cas', 'roas', 'roi'))
+      return 'Résultats récents : 3× ROAS en 60 jours et page 1 Google en 6 mois.';
+    if (has('seo', 'référencement', 'organique', 'contenu', 'recherche'))
+      return 'SEO : audit technique, mapping de mots-clés, 4 articles/mois et backlinks — à partir de 600$/mois.';
+    if (has('publicité', 'pub', 'meta', 'google', 'tiktok', 'ads', 'payant'))
+      return 'Publicité payante : Meta, Google, TikTok avec A/B testing hebdomadaire — à partir de 800$/mois.';
+    if (has('automatisation', 'crm', 'hubspot', 'zapier', 'pipeline'))
+      return 'Automatisation : mise en place HubSpot ou Pipedrive, séquences email, Zapier — à partir de 500$/mois.';
+    if (has('contact', 'audit', 'réunion', 'appel', 'réserver', 'email'))
+      return 'Réservez un audit gratuit de 45 min via le formulaire de contact ou écrivez-nous à hello@noortomark.com.';
+    return 'Dites-moi votre objectif (leads, revenus, ROAS) et votre budget mensuel — je vous oriente vers le bon service.';
+  }
+
+  // ── English replies (default) ─────────────────────────────────
+  if (has('price', 'pricing', 'cost', 'budget', 'fee'))
     return 'Most clients start at $800/mo for paid media and $600/mo for SEO. We scope a plan in 24 hours.';
-  }
-
-  if (has('guarantee', 'refund', 'risk')) {
+  if (has('guarantee', 'refund', 'risk'))
     return 'We set a KPI before kickoff. If we miss it by day 90, you get a full refund.';
-  }
-
-  if (has('start', 'timeline', 'how fast', 'kickoff', 'speed')) {
+  if (has('start', 'timeline', 'how fast', 'kickoff', 'speed'))
     return 'Kickoff in 7 business days. Campaigns live by week 2 with weekly reporting.';
-  }
-
-  if (has('case', 'results', 'proof', 'roas', 'roi', 'work')) {
-    return 'Recent wins: 3x ROAS in 60 days and page 1 SEO within 6 months. See the Results section for proof.';
-  }
-
-  if (has('seo', 'search', 'organic')) {
+  if (has('case', 'results', 'proof', 'roas', 'roi', 'work'))
+    return 'Recent wins: 3× ROAS in 60 days and page 1 SEO within 6 months.';
+  if (has('seo', 'search', 'organic'))
     return 'SEO: technical audit, keyword map, 4 articles/month, and backlinks starting at $600/mo.';
-  }
-
-  if (has('ads', 'media', 'ppc', 'paid', 'tiktok', 'meta', 'google')) {
+  if (has('ads', 'media', 'ppc', 'paid', 'tiktok', 'meta', 'google'))
     return 'Paid media: Meta, Google, TikTok with weekly A/B testing starting at $800/mo.';
-  }
-
-  if (has('automation', 'crm', 'hubspot', 'pipedrive', 'zapier', 'tech')) {
-    return 'Automation: HubSpot or Pipedrive setup, email sequences, lead scoring, Zapier webhooks from $500/mo.';
-  }
-
-  if (has('contact', 'call', 'audit', 'book', 'meeting')) {
-    return 'Book a 45-minute audit via the contact form or email hello@noortomark.com. Response within one business day.';
-  }
-
-  return 'Tell me your goal (leads, revenue, ROAS) and monthly budget; I will point you to the right service or book a quick audit.';
+  if (has('automation', 'crm', 'hubspot', 'pipedrive', 'zapier', 'tech'))
+    return 'Automation: HubSpot or Pipedrive setup, email sequences, lead scoring from $500/mo.';
+  if (has('contact', 'call', 'audit', 'book', 'meeting'))
+    return 'Book a free 45-minute audit via the contact form or email hello@noortomark.com.';
+  return 'Tell me your goal (leads, revenue, ROAS) and monthly budget — I\'ll point you to the right service.';
 }
 
 window.noortomark = {

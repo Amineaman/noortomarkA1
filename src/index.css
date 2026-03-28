@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #060608;
+  --color-surface: #0d0d10;
+  --color-s2: #131318;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-gold: #e8c97a;
+  --color-gold-lt: #f5d89d;
+  --color-gold-dk: #a89050;
+  --color-text: #f0ede8;
+  --color-muted: #a19f98;
+  --color-muted2: #c9c5be;
+
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+/* Base Styles */
+@layer base {
+  :root {
+    --bg: #060608;
+    --surface: #0d0d10;
+    --s2: #131318;
+    --border: rgba(255, 255, 255, 0.08);
+    --gold: #e8c97a;
+    --gold-lt: #f5d89d;
+    --gold-dk: #a89050;
+    --text: #f0ede8;
+    --muted: #a19f98;
+    --muted2: #c9c5be;
+  }
+
+  [data-theme="light"] {
+    --bg: #fefdfb;
+    --surface: #f9f7f3;
+    --s2: #f0ebe5;
+    --border: rgba(6, 6, 8, 0.12);
+    --gold: #a89050;
+    --gold-lt: #c9a84c;
+    --gold-dk: #8b7535;
+    --text: #2a2420;
+    --muted: #6b6660;
+    --muted2: #8a8680;
+
+    --color-bg: #fefdfb;
+    --color-surface: #f9f7f3;
+    --color-s2: #f0ebe5;
+    --color-border: rgba(6, 6, 8, 0.12);
+    --color-gold: #a89050;
+    --color-gold-lt: #c9a84c;
+    --color-gold-dk: #8b7535;
+    --color-text: #2a2420;
+    --color-muted: #6b6660;
+    --color-muted2: #8a8680;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    transition: background 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
+  }
+}
+
+/* Preserve legacy reveal animations */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  animation: fadeUp 0.6s ease backwards;
+}
