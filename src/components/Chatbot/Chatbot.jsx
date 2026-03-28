@@ -94,10 +94,10 @@ const Chatbot = () => {
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in duration-300`}
               >
                 <div
-                  className={`max-w-[85%] px-4 py-2.5 rounded-lg text-sm leading-relaxed ${
+                  className={`max-w-[90%] px-4 py-3 rounded-xl text-[0.85rem] leading-[1.6] whitespace-pre-wrap transition-all ${
                     msg.role === 'user'
                       ? 'bg-gold/10 text-gold border border-gold-dk/30 rounded-br-none'
-                      : 'bg-surface/50 text-text border border-border rounded-bl-none'
+                      : 'bg-surface/60 text-text border border-border rounded-bl-none shadow-sm'
                   }`}
                 >
                   {msg.content}

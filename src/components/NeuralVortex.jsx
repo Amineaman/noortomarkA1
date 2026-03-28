@@ -142,19 +142,22 @@ const NeuralVortex = ({ theme }) => {
     window.addEventListener('pointermove', handlePointer);
 
     const animate = (time) => {
-      pointerRef.current.x += (pointerRef.current.tX - pointerRef.current.x) * 0.1;
-      pointerRef.current.y += (pointerRef.current.tY - pointerRef.current.y) * 0.1;
+      // Throttle for performance
+      if (Math.floor(time / 16) % 2 === 0) {
+        pointerRef.current.x += (pointerRef.current.tX - pointerRef.current.x) * 0.1;
+        pointerRef.current.y += (pointerRef.current.tY - pointerRef.current.y) * 0.1;
 
-      gl.uniform1f(uniformsRef.current.u_time, time);
-      gl.uniform2f(uniformsRef.current.u_pointer_position, 
-        pointerRef.current.x / window.innerWidth, 
-        1.0 - pointerRef.current.y / window.innerHeight
-      );
-      gl.uniform1f(uniformsRef.current.u_scroll_progress, window.pageYOffset / (2 * window.innerHeight));
-      gl.uniform1i(uniformsRef.current.u_color_mode, 1);
-      gl.uniform1i(uniformsRef.current.u_shader_complexity, 15);
+        gl.uniform1f(uniformsRef.current.u_time, time);
+        gl.uniform2f(uniformsRef.current.u_pointer_position, 
+          pointerRef.current.x / window.innerWidth, 
+          1.0 - pointerRef.current.y / window.innerHeight
+        );
+        gl.uniform1f(uniformsRef.current.u_scroll_progress, window.pageYOffset / (2 * window.innerHeight));
+        gl.uniform1i(uniformsRef.current.u_color_mode, 1);
+        gl.uniform1i(uniformsRef.current.u_shader_complexity, 10); // Reduced complexity from 15 to 10 for better FPS
 
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      }
       requestRef.current = requestAnimationFrame(animate);
     };
 
