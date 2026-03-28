@@ -67,9 +67,15 @@ Turn visitors into qualified leads and potential clients
     });
 
     const data = await response.json();
+    
+    if (!response.ok) {
+        console.error('OpenRouter Error:', data);
+        return res.status(response.status).json({ error: data.error?.message || 'OpenRouter API failed' });
+    }
+
     return res.status(200).json(data);
   } catch (error) {
-    console.error('OpenRouter error:', error);
-    return res.status(500).json({ error: 'Failed to communicate with AI' });
+    console.error('Fetch error:', error);
+    return res.status(500).json({ error: 'Failed to communicate with AI endpoint' });
   }
 }
