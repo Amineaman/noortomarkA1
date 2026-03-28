@@ -1,0 +1,208 @@
+/* ══════════════════════════════════════════════════════════════
+   NOORTOMARK - ANIMATION STYLESHEET
+   Smooth, Premium Animations
+   ══════════════════════════════════════════════════════════════ */
+
+/* ────────────────────────────────────
+   REVEAL ANIMATIONS
+   ──────────────────────────────────── */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ────────────────────────────────────
+   STATUS INDICATORS
+   ──────────────────────────────────── */
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* ────────────────────────────────────
+   INTERACTIVE TRANSITIONS
+   ──────────────────────────────────── */
+
+@keyframes hover-lift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes glow-pulse {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ────────────────────────────────────
+   SCROLL REVEAL ANIMATION
+   ──────────────────────────────────── */
+
+.reveal {
+  animation: fadeUp 0.6s ease backwards;
+}
+
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered reveal delays */
+.reveal-d1 {
+  animation-delay: 0.1s;
+}
+
+.reveal-d2 {
+  animation-delay: 0.2s;
+}
+
+.reveal-d3 {
+  animation-delay: 0.3s;
+}
+
+.reveal-d4 {
+  animation-delay: 0.4s;
+}
+
+/* ────────────────────────────────────
+   CARD HOVER ANIMATIONS
+   ──────────────────────────────────── */
+
+.card,
+.card-featured {
+  transition: background 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card::after,
+.card-featured::after {
+  animation: glow-pulse 0.5s ease-out;
+}
+
+.card-arrow {
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ────────────────────────────────────
+   BUTTON ANIMATIONS
+   ──────────────────────────────────── */
+
+.btn {
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.btn-gold:active {
+  animation: scaleIn 0.2s ease-out;
+}
+
+/* ────────────────────────────────────
+   FILTER TAB ANIMATIONS
+   ──────────────────────────────────── */
+
+.filter-btn {
+  transition: all 0.25s ease;
+}
+
+.filter-btn.active {
+  animation: scaleIn 0.25s ease-out;
+}
+
+/* ────────────────────────────────────
+   NAVIGATION ANIMATIONS
+   ──────────────────────────────────── */
+
+nav ul a {
+  position: relative;
+  overflow: hidden;
+}
+
+nav ul a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--text);
+  transition: width 0.3s ease;
+}
+
+nav ul a:hover::after {
+  width: 100%;
+}
+
+/* ────────────────────────────────────
+   STEP CIRCLE ANIMATIONS
+   ──────────────────────────────────── */
+
+.step-circle {
+  transition: all 0.3s ease;
+}
+
+.step:hover .step-circle {
+  border-color: var(--gold);
+  color: var(--gold-lt);
+  box-shadow: 0 0 12px rgba(201, 168, 76, 0.2);
+}
+
+/* ────────────────────────────────────
+   SMOOTH SCROLLING PERFORMANCE
+   ──────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
