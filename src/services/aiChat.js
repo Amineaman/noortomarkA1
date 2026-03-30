@@ -12,7 +12,7 @@ export async function getAIChatResponse(messages) {
     if (!response.ok) {
         // In local development, if /api/chat fails, we can try to call OpenRouter directly
         // IF we have the VITE_OPENROUTER_API_KEY set (for debugging)
-        const devKey = import.meta.env.VITE_OPENROUTER_API_KEY;
+        const devKey = String(import.meta.env.VITE_OPENROUTER_API_KEY || '').trim();
         if (devKey && import.meta.env.DEV) {
             const systemPrompt = `
 You are a high-level AI sales assistant for NoorToMark, a marketing agency.
@@ -29,7 +29,7 @@ Strategy: Understand -> Educate -> Suggest. Propose a call if traveler is intere
                   'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                  model: 'google/gemini-2.0-flash-001',
+                  model: 'openai/gpt-3.5-turbo', // Switching models for testing
                   messages: [
                     { role: 'system', content: systemPrompt },
                     ...messages
@@ -44,6 +44,12 @@ Strategy: Understand -> Educate -> Suggest. Propose a call if traveler is intere
     if (!response.ok) {
       console.error('AI detailed error:', data);
       const errMsg = data.error?.message || response.statusText;
+      
+      // If the error is 401 (Unauthorized) or 'User not found', provide a helpful mock response
+      if (response.status === 401 || errMsg.includes('User not found')) {
+        return "⚠️ **DEMO MODE**: \n\nلقد وصلنا إلى هنا، ولكن يبدو أن مفتاح الـ **API Key** الخاص بك في OpenRouter غير صالح (401 User not found). \n\nالمشكل ليس من الكود، بل من الحساب الخاص بك. يجب عليك التأكد من أن حسابك في منصة OpenRouter يحتوي على رصيد كافٍ، أو أنك قمت بنسخ المفتاح الصحيح. \n\n*إلى حين إصلاح المفتاح، أنا أعمل في وضع التجربة.*";
+      }
+
       throw new Error(`AI error: ${response.status} ${errMsg}`);
     }
 
